@@ -7,7 +7,7 @@ use noxkiwi\core\Exception;
  * I am the Exception for errors during Downlaods.
  *
  * @package      noxkiwi\bucket
- * @author       Jan Nox <jan@nox.kiwi>
+ * @author       Jan Nox <jan.nox@pm.me>
  * @license      https://nox.kiwi/license
  * @copyright    2021 noxkiwi
  * @version      1.0.0

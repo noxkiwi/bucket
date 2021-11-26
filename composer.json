@@ -3,7 +3,7 @@
   "description": "I am the Bucket file manager.",
   "version": "1.0.0",
   "type": "package",
-  "license": "proprietary",
+  "license": "GPL-3.0-or-later",
   "keywords": [
     "file",
     "file manager",
@@ -18,14 +18,14 @@
   "authors": [
     {
       "name": "Jan Nox",
-      "email": "jan@nox.kiwi",
+      "email": "jan.nox@pm.me",
       "homepage": "https://nox.kiwi",
       "role": "Lead Developer"
     }
   ],
   "require": {
     "php": ">=8.0.0",
-    "noxkiwi/core": "*"
+    "noxkiwi/core": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "^7"

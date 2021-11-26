@@ -9,15 +9,19 @@ use noxkiwi\core\File\LocalFile;
 use noxkiwi\core\Filesystem;
 use noxkiwi\core\Helper\FilesystemHelper;
 use noxkiwi\validator\Validator\Structure\Config\bucket\LocalValidator;
+use function filesize;
 use function is_array;
 use function is_dir;
+use function is_writable;
+use function ksort;
+use function mkdir;
 use const E_WARNING;
 
 /**
  * I am the Bucket for local files
  *
  * @package      noxkiwi\bucket
- * @author       Jan Nox <jan@nox.kiwi>
+ * @author       Jan Nox <jan.nox@pm.me>
  * @license      https://nox.kiwi/license
  * @copyright    2020 noxkiwi
  * @version      1.0.0

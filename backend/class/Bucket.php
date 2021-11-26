@@ -12,16 +12,32 @@ use noxkiwi\core\Helper\MimeHelper;
 use noxkiwi\core\Helper\WebHelper;
 use noxkiwi\log\Traits\LogTrait;
 use noxkiwi\singleton\Singleton;
+use function basename;
+use function compact;
 use function file_exists;
+use function filemtime;
+use function filesize;
+use function flush;
+use function gmdate;
+use function header;
+use function in_array;
 use function is_readable;
 use function is_writeable;
+use function ob_clean;
+use function preg_replace;
+use function readfile;
+use function str_replace;
+use function str_starts_with;
+use function time;
+use function uniqid;
+use function unlink;
 use const E_WARNING;
 
 /**
  * I am
  *
  * @package      noxkiwi\bucket
- * @author       Jan Nox <jan@nox.kiwi>
+ * @author       Jan Nox <jan.nox@pm.me>
  * @license      https://nox.kiwi/license
  * @copyright    2020 noxkiwi
  * @version      1.0.0

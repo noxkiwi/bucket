@@ -11,10 +11,30 @@ use noxkiwi\core\Exception\SystemComponentException;
 use noxkiwi\core\File\FtpFile;
 use noxkiwi\core\Filesystem;
 use noxkiwi\core\Helper\FilesystemHelper;
+use function array_splice;
 use function count;
+use function explode;
 use function extension_loaded;
+use function ftp_connect;
+use function ftp_delete;
+use function ftp_get;
+use function ftp_login;
+use function ftp_mkdir;
+use function ftp_nlist;
+use function ftp_pasv;
+use function ftp_put;
+use function ftp_rawlist;
+use function ftp_rmdir;
+use function ftp_ssl_connect;
+use function implode;
 use function in_array;
 use function is_array;
+use function ksort;
+use function preg_split;
+use function str_contains;
+use function str_replace;
+use function strncmp;
+use const E_ERROR;
 use const E_WARNING;
 
 /**
@@ -23,7 +43,7 @@ use const E_WARNING;
  * <br />I can handle connections using FTP and FTPS. Maybe SFTP (?)
  *
  * @package      noxkiwi\bucket
- * @author       Jan Nox <jan@nox.kiwi>
+ * @author       Jan Nox <jan.nox@pm.me>
  * @license      https://nox.kiwi/license
  * @copyright    2020 noxkiwi
  * @version      1.0.0
