@@ -3,9 +3,9 @@ namespace noxkiwi\bucket;
 
 use JetBrains\PhpStorm\NoReturn;
 use noxkiwi\bucket\Exception\DownloadException;
+use noxkiwi\bucket\Exception\FileHandlingException;
 use noxkiwi\bucket\Interfaces\BucketInterface;
 use noxkiwi\core\Environment;
-use noxkiwi\core\ErrorStack;
 use noxkiwi\core\Filesystem;
 use noxkiwi\core\Helper\FilesystemHelper;
 use noxkiwi\core\Helper\MimeHelper;
@@ -13,7 +13,6 @@ use noxkiwi\core\Helper\WebHelper;
 use noxkiwi\log\Traits\LogTrait;
 use noxkiwi\singleton\Singleton;
 use function basename;
-use function compact;
 use function file_exists;
 use function filemtime;
 use function filesize;
@@ -31,6 +30,7 @@ use function str_starts_with;
 use function time;
 use function uniqid;
 use function unlink;
+use const E_ERROR;
 use const E_WARNING;
 
 /**
@@ -56,9 +56,7 @@ abstract class Bucket extends Singleton implements BucketInterface
     protected string $baseUrl;
     /** @var bool I set the bucket to public (direct URLs). */
     protected bool $public;
-    /** @var \noxkiwi\core\ErrorStack I contain an instance of Errorstack. */
-    protected ErrorStack $errorStack;
-    private array        $options;
+    private array  $options;
 
     /**
      * Creates the instance, establishes the connection and authenticates
@@ -69,11 +67,10 @@ abstract class Bucket extends Singleton implements BucketInterface
     protected function __construct(array $data)
     {
         parent::__construct();
-        $this->baseUrl    = '';
-        $this->public     = false;
-        $this->errorStack = ErrorStack::getErrorStack('BUCKET');
-        $this->baseDir    = $data['basedir'];
-        $this->public     = $data['public'];
+        $this->baseUrl = '';
+        $this->public  = false;
+        $this->baseDir = $data['basedir'];
+        $this->public  = $data['public'];
         if ($this->public === true) {
             $this->baseUrl = $data['baseurl'];
         }
@@ -152,14 +149,10 @@ abstract class Bucket extends Singleton implements BucketInterface
     public function fileGetUrl(string $remoteFile): string
     {
         if (! $this->public) {
-            $this->errorStack->addError('BUCKET_NOT_PUBLIC');
-
-            return '';
+            throw new FileHandlingException("$remoteFile cannot be downloaded, bucket is private.", E_ERROR);
         }
         if (! $this->fileAvailable($this->normalizePath($remoteFile))) {
-            $this->errorStack->addError('REMOTE_FILE_NOT_FOUND', compact('remoteFile'));
-
-            return '';
+            throw new FileHandlingException("$remoteFile is not available.", E_ERROR);
         }
 
         return $this->baseUrl . $remoteFile;
@@ -181,14 +174,6 @@ abstract class Bucket extends Singleton implements BucketInterface
         }
 
         return (string)str_replace('//', '/', $this->baseDir . $path);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getErrorStack(): ErrorStack
-    {
-        return $this->errorStack;
     }
 
     /**
@@ -245,14 +230,10 @@ abstract class Bucket extends Singleton implements BucketInterface
     {
         $remoteFile = $this->normalizePath($remoteFile);
         if (! $this->fileAvailable($remoteFile)) {
-            $this->errorStack->addError('REMOTE_FILE_NOT_FOUND', compact('remoteFile'));
-
-            return false;
+            throw new FileHandlingException("$remoteFile is not available.", E_ERROR);
         }
         if (Filesystem::getInstance()->fileAvailable($localFile)) {
-            $this->errorStack->addError('LOCAL_FILE_EXISTS', compact('localFile'));
-
-            return false;
+            throw new FileHandlingException("$localFile already exists.", E_ERROR);
         }
         $localDirectory = FilesystemHelper::getDirectory($localFile);
         if (Filesystem::getInstance()->dirAvailable($localDirectory)) {

@@ -1,10 +1,6 @@
 <?php declare(strict_types = 1);
 namespace noxkiwi\bucket\Interfaces;
 
-use noxkiwi\core\ErrorStack;
-use noxkiwi\value\value\Text\FilenameValue;
-use noxkiwi\value\value\Text\FilerelativeValue;
-
 /**
  * I am the class interface for any Bucket driver that may exist one day.
  * <br />The noxkiwi Bucket Classes may handle a variety of different storage drivers.
@@ -73,6 +69,8 @@ interface BucketInterface
      * I may return an empty string if the bucket is not public.
      *
      * @param string $remoteFile
+     *
+     * @throws \noxkiwi\bucket\Exception\FileHandlingException
      *
      * @return       string
      */
@@ -188,12 +186,5 @@ interface BucketInterface
      * @return bool
      */
     public function pathExists(string $remotePath): bool;
-
-    /**
-     * Returns the errorstack of the Bucket
-     *
-     * @return       \noxkiwi\core\ErrorStack
-     */
-    public function getErrorStack(): ErrorStack;
 }
 
